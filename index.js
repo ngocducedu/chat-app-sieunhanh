@@ -4,7 +4,7 @@ const {Server} = require('socket.io')
 
 const http = require('http')
 const server = http.createServer(app)
-
+const delay = require('delay')
 
 const io = new Server(server)
 
@@ -23,3 +23,15 @@ io.on('connection', (socket) => {
 server.listen(3000, ()=> {
     console.log('listening on port 3000')
 })
+
+async function broadcastBitcoinPrice() {
+    while(true) {
+        const price = 40745 + Math.random() * 400
+        io.emit('bitcoin-price', {
+            price: parseFloat(price.toFixed(2))
+        })
+        await delay(1000)
+    }
+}
+
+broadcastBitcoinPrice()
